@@ -1,0 +1,62 @@
+/**
+ * #.# Common SCSS
+ *
+ * Can include things like variables and mixins
+ * that are used across the project.
+*/
+
+// Colors.
+$black: rgb(41, 41, 41);
+$yellow: #fcc418;
+
+.wp-block{
+    max-width: 100%;
+
+    @media screen and (min-width: 992px){
+        max-width: 912px;
+    }
+
+    @media screen and (min-width: 1200px){
+        max-width: 1120px;
+    }
+}
+
+.container{
+    max-width: 100%;
+    margin: 0 auto;
+    padding-left: 15px;
+    padding-right: 15px;
+
+    @media screen and (min-width: 992px){
+        max-width: 912px;
+    }
+
+    @media screen and (min-width: 1200px){
+        max-width: 1120px;
+    }
+}
+
+.hero-banner-heading-text{
+    font-size: 46px;
+}
+
+.btn{
+    &-primary{
+        display: inline-block;
+        color: $black;
+        text-transform: uppercase;
+        text-decoration: none;
+        padding: 18px 24px;
+        background: $yellow;
+        border-radius: 15px;
+        font-weight: bold;
+        font-size: 14px;
+        transition: all 0.3s ease-in-out;
+
+        &:hover,
+        &:focus,
+        &:active{
+
+        }
+    }
+}

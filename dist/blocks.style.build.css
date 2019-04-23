@@ -1,0 +1,94 @@
+/**
+ * #.# Common SCSS
+ *
+ * Can include things like variables and mixins
+ * that are used across the project.
+*/
+.wp-block {
+  max-width: 100%; }
+  @media screen and (min-width: 992px) {
+    .wp-block {
+      max-width: 912px; } }
+  @media screen and (min-width: 1200px) {
+    .wp-block {
+      max-width: 1120px; } }
+
+.container, .edugap-herobanner-content {
+  max-width: 100%;
+  margin: 0 auto;
+  padding-left: 15px;
+  padding-right: 15px; }
+  @media screen and (min-width: 992px) {
+    .container, .edugap-herobanner-content {
+      max-width: 912px; } }
+  @media screen and (min-width: 1200px) {
+    .container, .edugap-herobanner-content {
+      max-width: 1120px; } }
+
+.hero-banner-heading-text {
+  font-size: 46px; }
+
+.btn-primary {
+  display: inline-block;
+  color: #292929;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 18px 24px;
+  background: #fcc418;
+  border-radius: 15px;
+  font-weight: bold;
+  font-size: 14px;
+  -webkit-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out; }
+
+/**
+ * #.# Styles
+ *
+ * CSS for both Frontend+Backend.
+ */
+.wp-block-edugap-herobanner {
+  background-size: cover;
+  overflow: hidden; }
+  @media screen and (min-width: 1200px) {
+    .wp-block-edugap-herobanner {
+      height: 870px; } }
+
+.edugap-herobanner-content {
+  height: inherit;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+      align-items: center;
+  position: relative;
+  z-index: 5; }
+
+.edugap-herobanner__content-wrapper {
+  width: 100%;
+  text-align: center; }
+  @media screen and (min-width: 992px) {
+    .edugap-herobanner__content-wrapper {
+      text-align: left;
+      max-width: 50%; } }
+
+.herobanner__bg-video-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: inherit;
+  z-index: 1; }
+  .herobanner__bg-video-wrapper video {
+    width: auto;
+    height: inherit; }
+
+.edugap-herobanner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: inherit;
+  z-index: 2; }
+
+.edugap-herobanner-overlay {
+  opacity: 0.1; }

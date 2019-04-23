@@ -1,0 +1,60 @@
+/**
+ * #.# Styles
+ *
+ * CSS for both Frontend+Backend.
+ */
+
+.wp-block-edugap-herobanner{
+    background-size: cover;
+    overflow: hidden;
+
+     @media screen and (min-width: 1200px){
+         height: 870px;
+     }
+}
+
+.edugap-herobanner-content{
+    @extend .container !optional;
+    height: inherit;
+    display: flex;
+    align-items: center;
+    position: relative;
+    z-index: 5;
+}
+
+.edugap-herobanner__content-wrapper{
+    width: 100%;
+    text-align: center;
+
+    @media screen and (min-width: 992px){
+        text-align: left;
+        max-width: 50%;
+    }
+}
+
+.herobanner__bg-video-wrapper{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: inherit;
+    z-index: 1;
+
+    video{
+        width: auto;
+        height: inherit;
+    }
+}
+
+.edugap-herobanner-overlay{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: inherit;
+    z-index: 2;
+}
+
+.edugap-herobanner-overlay{
+    opacity: 0.1;
+}
