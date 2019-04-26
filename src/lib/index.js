@@ -1,6 +1,4 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/label-has-for */
-/* eslint-disable linebreak-style */
+/* eslint-disable jsx-a11y/label-has-associated-control *//* eslint-disable jsx-a11y/label-has-for *//* eslint-disable linebreak-style */
 /* eslint-disable no-multiple-empty-lines */
 /* eslint-disable comma-dangle */
 /* eslint-disable no-console */

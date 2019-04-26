@@ -9,10 +9,8 @@
 /* eslint-disable react/jsx-indent */
 /* eslint-disable no-unused-vars */
 /* eslint-disable eol-last */
-import defaultColors from '../lib/colors';
 
 const HeroBannerAttributes = {
-	color: defaultColors,
 	headingText: {
 		type: 'string',
 		source: 'text',
@@ -27,11 +25,19 @@ const HeroBannerAttributes = {
 		type: 'string',
 		default: '#000000',
 	},
+	overlayTransparency: {
+		type: 'number',
+		default: 5,
+	},
+	backgroundImage: {
+		type: 'string',
+		default: null,
+	},
 	backgroundVideo: {
 		type: 'string',
 		default: null,
 	},
-	backgroundImage: {
+	backgroundMediaType: {
 		type: 'string',
 		default: null,
 	},
@@ -43,14 +49,18 @@ const HeroBannerAttributes = {
 		type: 'string',
 		default: '#',
 	},
-	buttonLabelColor: {
-		type: 'string',
-		default: '#000000',
-	},
 	buttonColor: {
 		type: 'string',
 		default: '#fcc418',
 	},
+	buttonTextColor: {
+		type: 'string',
+		default: '#000000',
+	},
+	buttonBorderRadius: {
+		type: 'number',
+		default: 15
+	}
 };
 
 export default HeroBannerAttributes;

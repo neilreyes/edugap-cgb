@@ -56,6 +56,10 @@
   max-width: 100%;
   margin-bottom: 15px; }
 
+.components-base-control {
+  max-width: 100%;
+  width: 100%; }
+
 .editor-rich-text {
   z-index: 10; }
 
@@ -65,7 +69,10 @@
   position: absolute;
   z-index: 2;
   left: 0;
-  top: 0; }
+  top: 0;
+  -webkit-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out; }
 
 .edugap-herobanner-btn {
   padding: 24px 18px;
@@ -91,3 +98,6 @@
     border-radius: 5px;
     border: 1px solid #e2e4e7;
     overflow: hidden; }
+
+.wp-block-edugap-herobanner {
+  height: 475px; }

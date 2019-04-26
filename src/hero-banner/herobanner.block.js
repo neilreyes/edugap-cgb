@@ -9,12 +9,8 @@
 /* eslint-disable react/jsx-indent */
 /* eslint-disable no-unused-vars */
 /* eslint-disable eol-last */
-
-//  Import CSS.
 import './herobanner.style.scss';
 import './herobanner.editor.scss';
-
-// Import inspecto
 import HeroBannerOptions from './herobanner.inspector';
 import HeroBannerAttributes from './herobanner.attributes';
 
@@ -22,8 +18,27 @@ const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
 const { RichText, InspectorControls } = wp.editor;
 
-console.log('wp.blocks:', wp.blocks );
-console.log('wp.editor:', wp.editor );
+const renderBackgroundImage = ({ attributes }) => {
+	const { backgroundMediaType, backgroundImage } = attributes;
+	if (backgroundMediaType === 'image') {
+		return {
+			backgroundImage: `url( ${ backgroundImage } )`,
+			backgroundSize: 'cover',
+			backgroundPosition: 'center',
+		};
+	}
+};
+
+const renderBackgroundVideo = ({ attributes }) => {
+	const { backgroundMediaType, backgroundVideo } = attributes;
+	if ( backgroundMediaType === 'video') {
+		return (
+			<div className="herobanner__bg-video-wrapper">
+				<video autoPlay loop src={backgroundVideo}></video>
+			</div>
+		);
+	}
+};
 
 registerBlockType( 'edugap/herobanner', {
 
@@ -32,7 +47,7 @@ registerBlockType( 'edugap/herobanner', {
 	description: __( 'A large box section with heading title and a call-to-action. Typically used at the very top of the page', 'edugap' ),
 	category: 'edugap-category',
 	supports: {
-		align: true,
+		align: [ 'center', 'wide', 'full' ],
 	},
 	attributes: HeroBannerAttributes,
 	edit: props => {
@@ -42,13 +57,14 @@ registerBlockType( 'edugap/herobanner', {
 			className } = props;
 		const {
 			overlayColor,
-			backgroundImage,
-			backgroundVideo,
 			fontColor,
 			buttonColor,
 			buttonLabel,
-			buttonLabelColor,
-			headingText } = attributes;
+			buttonTextColor,
+			overlayTransparency,
+			headingText,
+			buttonBorderRadius } = attributes;
+		const transparency = overlayTransparency / 10;
 		function handleOnHeadingTextChange( newHeadingText ) {
 			setAttributes( { headingText: newHeadingText } );
 		}
@@ -62,11 +78,7 @@ registerBlockType( 'edugap/herobanner', {
 			<div
 				key="editable-content"
 				className={className}
-				style={{
-					backgroundImage: `url( ${ backgroundImage } )`,
-					backgroundSize: 'cover',
-					backgroundPosition: 'center'
-				}} >
+				style={renderBackgroundImage(props)} >
 				<div className="edugap-herobanner-content">
 					<div className="edugap-herobanner__content-wrapper">
 						<RichText
@@ -84,72 +96,50 @@ registerBlockType( 'edugap/herobanner', {
 							placeholder="Button Label"
 							style={{
 								backgroundColor: buttonColor,
-								color: buttonLabelColor,
+								color: buttonTextColor,
+								borderRadius: buttonBorderRadius
 							}} />
 					</div>
 				</div>
 				<div
 					className="edugap-herobanner-overlay"
-					style={{ backgroundColor: overlayColor }}></div>
-				<div className="herobanner__bg-video-wrapper">
-					<video autoplay loop src={backgroundVideo}>
-					</video>
+					style={{ backgroundColor: overlayColor, opacity: transparency }}>
 				</div>
+				{renderBackgroundVideo(props)}
 			</div>,
 		];
 	},
 	save: props => {
 		const { attributes, className } = props;
-		const { backgroundImage, backgroundVideo, headingText, fontColor, overlayColor, buttonLabel, buttonLink } = attributes;
+		const { buttonBorderRadius, headingText, fontColor, overlayColor, buttonLabel, buttonLink, overlayTransparency } = attributes;
+		const transparency = overlayTransparency / 10;
 		return (
 			<div
 				className={ className }
-				style={ { backgroundImage: `url(${ backgroundImage })` } } >
+				style={renderBackgroundImage(props)} >
 				<div className="edugap-herobanner-content">
 					<div className="edugap-herobanner__content-wrapper">
 						<RichText.Content
 							tagName="h1"
 							className="hero-banner-heading-text"
-							style={{ color: fontColor }} 
+							style={{ color: fontColor }}
 							value={headingText} />
-						<a href={buttonLink} className="btn-primary"> {buttonLabel} </a>
+						<a
+							href={buttonLink}
+							className="btn-primary"
+							style={{
+								borderRadius: buttonBorderRadius
+							}}>
+								{buttonLabel}
+						</a>
 					</div>
 				</div>
 				<div
 					className="edugap-herobanner-overlay"
-					style={ { backgroundColor: overlayColor } }></div>
-				<div className="herobanner__bg-video-wrapper">
-					<video autoplay loop src={backgroundVideo}>
-					</video>
+					style={{ backgroundColor: overlayColor, opacity: transparency } }>
 				</div>
+				{renderBackgroundVideo(props)}
 			</div>
 		);
 	},
-	depecrated: [
-		{
-			attributes: HeroBannerAttributes,
-			save: props => {
-				const { attributes, className } = props;
-				const { backgroundImage, headingText, overlayColor, buttonLabel } = attributes;
-				return (
-					<div
-						className={className}
-						style={{ backgroundImage: `url(${ backgroundImage })` }} >
-						<div className="edugap-herobanner-content">
-							<div className="edugap-herobanner__content-wrapper">
-								<RichText.Content
-									tagName="h1"
-									className="hero-banner-heading-text"
-									value={headingText} />
-								<a href="..." className="btn--primary"> {buttonLabel} </a>
-							</div>
-						</div>
-						<div
-							className="edugap-herobanner-overlay"
-							style={{ backgroundColor: overlayColor }}></div>
-					</div>
-				);
-			}
-		}
-	],
 } );

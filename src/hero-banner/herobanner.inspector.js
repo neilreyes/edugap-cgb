@@ -1,6 +1,4 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/label-has-for */
-/* eslint-disable linebreak-style */
+/* eslint-disable jsx-a11y/label-has-associated-control *//* eslint-disable jsx-a11y/label-has-for *//* eslint-disable linebreak-style */
 /* eslint-disable no-multiple-empty-lines */
 /* eslint-disable comma-dangle */
 /* eslint-disable no-console */
@@ -10,45 +8,60 @@
 /* eslint-disable indent */
 /* eslint-disable react/jsx-indent */
 /* eslint-disable no-unused-vars */
-const { Button, ColorPalette, ColorIndicator, PanelBody, PanelRow, TextControl, Path, SVG } = wp.components;
-const { MediaUpload } = wp.editor;
-import defaultColors from '../lib/colors';
+const {
+    BaseControl,
+    Button,
+    ColorPalette,
+    ColorIndicator,
+    PanelBody,
+    PanelRow,
+    RangeControl } = wp.components;
+const { __ } = wp.i18n;
+const { MediaUpload, URLInput } = wp.editor;
 
-const ImagePlaceHolder = () => (
-    <SVG viewBox="0 0 512 376" xmlns="http://www.w3.org/2000/svg">
-        <Path d="M0 0v376h512V0H0zm480 344H32V32h448v312z"></Path>
-        <circle cx="409.1" cy="102.9" r="40.9"></circle>
-        <Path d="M480 344H32l86.3-164.2 21.7 11.3 49-77.3 100 113.1 8.9-9.3 17.1 22.3 26-46.4 52.9 71.2 15.1-15.9z"></Path>
-    </SVG>
-);
+import { ALLOWED_BACKGROUND_MEDIA_TYPES, DEFAULT_COLORS } from '../lib/index';
+import { imagePlaceHolder } from '../lib/assets/svgs';
 
 const HeroBannerOptions = ( { attributes, setAttributes } ) => {
-    function setBackgroundImage(imageObject) {
-        setAttributes({ backgroundImage: imageObject.sizes.full.url });
+    function setbackgroundMedia(obj) {
+        const { type } = obj;
+
+        if ( type === 'image' ) {
+            setAttributes({ backgroundImage: obj.sizes.full.url });
+            setAttributes({ backgroundMediaType: 'image' });
+        } else if ( type === 'video' ) {
+            setAttributes({ backgroundVideo: obj.url });
+            setAttributes({ backgroundMediaType: 'video' });
+        }
     }
 
-    function setBackgroundVideo(videoObject) {
-        setAttributes({ backgroundVideo: videoObject.url });
+    function onChangeOverlayColor(overlayColor) {
+        setAttributes({ overlayColor });
     }
 
-    function onChangeOverlayColor(color) {
-        setAttributes({ overlayColor: color });
+    function setFontColor(fontColor) {
+        setAttributes({ fontColor });
     }
 
-    function setFontColor(color) {
-        setAttributes({ fontColor: color });
+    function setButtonLink(buttonLink) {
+        setAttributes({ buttonLink });
     }
 
-    function setButtonLink(link) {
-        setAttributes({ buttonLink: link });
+    function setOverlayTransparency(overlayTransparency) {
+        setAttributes({ overlayTransparency });
     }
 
     function resetImage() {
-        setAttributes({ backgroundImage: null });
+        setAttributes({ backgroundMedia: null });
+        setAttributes({ backgroundMediaType: null });
     }
 
-    function resetVideo() {
-        setAttributes({ backgroundVideo: null });
+    function renderBackgroundPreview() {
+        if ( attributes.backgroundMediaType === 'image' ) {
+            return <img src={attributes.backgroundImage} alt="" />;
+        }
+
+        return <video autoPlay loop src={attributes.backgroundVideo}></video>;
     }
 
     return (<div>
@@ -56,75 +69,53 @@ const HeroBannerOptions = ( { attributes, setAttributes } ) => {
             title="Background Settings"
             initialOpen={false}>
             <PanelRow>
-                <label>Background Image</label>
-                <MediaUpload
-                    onSelect={ setBackgroundImage }
-                    type="image"
-                    value={attributes.backgroundImage}
-                    render={({ open }) => {
-                        if (attributes.backgroundImage === null) {
+                <BaseControl
+                    label={__('Background Image or Video', 'edugap')}
+                    help={__('Upload .mp4 format for video', 'edugap')}>
+                    <MediaUpload
+                        onSelect={ setbackgroundMedia }
+                        type={ALLOWED_BACKGROUND_MEDIA_TYPES}
+                        value={attributes.backgroundMedia}
+                        render={({ open }) => {
+                            if (attributes.backgroundMediaType === null) {
+                                return (
+                                    <div className="component-mediaupload__wrapper component-mediaupload__null">
+                                        <Button onClick={open} className="component-btn-image-uploader">
+                                            {imagePlaceHolder()}
+                                        </Button>
+                                    </div>
+                                );
+                            }
+
                             return (
-                                <div className="component-mediaupload__wrapper component-mediaupload__null">
-                                    <Button onClick={open} className="component-btn-image-uploader">
-                                        <SVG viewBox="0 0 512 376" xmlns="http://www.w3.org/2000/svg">
-                                            <Path d="M0 0v376h512V0H0zm480 344H32V32h448v312z"></Path>
-                                            <circle cx="409.1" cy="102.9" r="40.9"></circle>
-                                            <Path d="M480 344H32l86.3-164.2 21.7 11.3 49-77.3 100 113.1 8.9-9.3 17.1 22.3 26-46.4 52.9 71.2 15.1-15.9z"></Path>
-                                        </SVG>
+                                <div className="component-mediaupload__wrapper">
+                                    <Button onClick={open}>
+                                        {renderBackgroundPreview()}
                                     </Button>
+                                    <Button isDefault={true} onClick={resetImage}>Clear</Button>
                                 </div>
                             );
-                        }
-
-                        return (
-                            <div className="component-mediaupload__wrapper">
-                                <Button onClick={open}><img src={attributes.backgroundImage} alt="" /></Button>
-                                <Button isDefault={true} onClick={resetImage}>Clear</Button>
-                            </div>
-                        );
-                    }}
-                />
+                        }}
+                    />
+                </BaseControl>
             </PanelRow>
-
             <PanelRow>
-                <label>Background Video</label>
-                <MediaUpload
-                    onSelect={ setBackgroundVideo }
-                    type="video"
-                    value={attributes.backgroundVideo}
-                    render={({ open }) => {
-                        if (attributes.backgroundVideo === null) {
-                            return (
-                                <div className="component-mediaupload__wrapper component-mediaupload__null">
-                                    <Button onClick={open} className="component-btn-image-uploader">
-                                        <SVG viewBox="0 0 512 376" xmlns="http://www.w3.org/2000/svg">
-                                            <Path d="M0 0v376h512V0H0zm480 344H32V32h448v312z"></Path>
-                                            <circle cx="409.1" cy="102.9" r="40.9"></circle>
-                                            <Path d="M480 344H32l86.3-164.2 21.7 11.3 49-77.3 100 113.1 8.9-9.3 17.1 22.3 26-46.4 52.9 71.2 15.1-15.9z"></Path>
-                                        </SVG>
-                                    </Button>
-                                </div>
-                            );
-                        }
-
-                        return (
-                            <div className="component-mediaupload__wrapper">
-                                <Button onClick={open}><video src={attributes.backgroundVideo} autoplay loop /></Button>
-                                <Button isDefault={true} onClick={resetVideo}>Clear</Button>
-                            </div>
-                        );
-                    }}
-                />
-            </PanelRow>
-
-
-            <PanelRow>
-                <label>Background Overlay<ColorIndicator colorValue={attributes.overlayColor} /></label>
-                <ColorPalette
-                    colors={defaultColors}
-                    value={attributes.overlayColor}
-                    onChange={onChangeOverlayColor}
-                />
+                <BaseControl label="Background Overlay">
+                    <ColorPalette
+                        colors={DEFAULT_COLORS}
+                        value={attributes.overlayColor}
+                        onChange={onChangeOverlayColor}
+                    />
+                </BaseControl>
+                <BaseControl>
+                    <RangeControl
+                        label="Background Overlay Opacity"
+                        value={attributes.overlayTransparency}
+                        onChange={setOverlayTransparency}
+                        min={0}
+                        max={10}
+                    />
+                </BaseControl>
             </PanelRow>
         </PanelBody>
 
@@ -134,7 +125,7 @@ const HeroBannerOptions = ( { attributes, setAttributes } ) => {
             <PanelRow>
                 <label>Font Color<ColorIndicator colorValue={attributes.fontColor} /></label>
             <ColorPalette
-                colors={defaultColors}
+                colors={DEFAULT_COLORS}
                 value={attributes.fontColor}
                 onChange={setFontColor}
             />
@@ -145,13 +136,36 @@ const HeroBannerOptions = ( { attributes, setAttributes } ) => {
             title="Button Settings"
             initialOpen={false}>
             <PanelRow>
-                <strong>Button Link</strong>
-                <TextControl
-                    type="url"
-                    label="Button Link"
-                    value={attributes.buttonLink}
-                    onChange={setButtonLink} />
+                <BaseControl label="Button Link">
+                    <URLInput
+                        value={attributes.buttonLink}
+                        onChange={setButtonLink} />
+                </BaseControl>
+                <BaseControl label="Button Color">
+                    <ColorPalette
+                        colors={DEFAULT_COLORS}
+                        value={attributes.buttonColor}
+                        onChange={buttonColor => setAttributes({ buttonColor })}
+                    />
+                </BaseControl>
+                <BaseControl label="Text Color">
+                    <ColorPalette
+                        colors={DEFAULT_COLORS}
+                        value={attributes.buttonTextColor}
+                        onChange={buttonTextColor => setAttributes({ buttonTextColor })}
+                    />
+                </BaseControl>
+                <BaseControl>
+                    <RangeControl
+                        label="Border Radius"
+                        value={attributes.buttonBorderRadius}
+                        onChange={buttonBorderRadius => setAttributes({ buttonBorderRadius })}
+                        min={0}
+                        max={50}
+                    />
+                </BaseControl>
             </PanelRow>
+            {console.log(attributes.buttonBorderRadius)}
         </PanelBody>
     </div>);
 };
